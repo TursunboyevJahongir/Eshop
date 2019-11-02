@@ -16,7 +16,7 @@ use Yii;
  * @property OrderHistory[] $orderHistories
  * @property User[] $users
  */
-class AddressModel extends \yii\db\ActiveRecord
+class Address extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

@@ -9,7 +9,7 @@
 namespace app\controllers;
 
 
-use app\models\AddressModel;
+use app\models\Address;
 use app\models\ResponseJSON;
 use app\models\User;
 use Yii;
@@ -56,8 +56,9 @@ class UserController extends Controller
                 $query = $query->select(" region.name AS Region,district.name AS District,address.address AS Address ")
                     ->from('address')
                     ->Leftjoin("district",' district.id = address.`district_id`')
-                    ->Leftjoin("region",' region.id = district.`region_id`')->all();
-                $query =['address'=> $query];
+                    ->Leftjoin("region",' region.id = district.`region_id`')
+                    ->where('address.id ='.$id)->all();
+                $query =['Address'=> $query];
                 $model = $model->toArray();
                 $res = array_merge($model,$query);
 
