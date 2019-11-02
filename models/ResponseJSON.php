@@ -8,8 +8,9 @@ use yii\base\Model;
 
 class ResponseJSON
 {
-    public $data;
     public $status;
     public $message;
+    public $data;
+
 
 }

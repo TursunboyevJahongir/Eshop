@@ -9,12 +9,15 @@
 namespace app\controllers;
 
 
+use app\models\AddressModel;
 use app\models\ResponseJSON;
 use app\models\User;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\db\Exception;
+use yii\db\Query;
 use yii\db\StaleObjectException;
+use yii\helpers\ArrayHelper;
 use yii\rest\ActiveController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -48,7 +51,17 @@ class UserController extends Controller
                 if ($model === null) {
                     throw new NotFoundHttpException('topilmadi');
                 }
-                return $model;
+//                $address = Yii::$app->db->createCommand("SELECT region.name AS Region,district.name AS District,address.address AS Address FROM address LEFT JOIN district district ON district.id = address.`district_id` LEFT JOIN region region ON region.id = district.`region_id`")->queryAll();
+                $query = new Query;
+                $query = $query->select(" region.name AS Region,district.name AS District,address.address AS Address ")
+                    ->from('address')
+                    ->Leftjoin("district",' district.id = address.`district_id`')
+                    ->Leftjoin("region",' region.id = district.`region_id`')->all();
+                $query =['address'=> $query];
+                $model = $model->toArray();
+                $res = array_merge($model,$query);
+
+                return $res;
             }
         }
     }
