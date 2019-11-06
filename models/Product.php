@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "product".
@@ -30,6 +31,13 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            ['class' => TimestampBehavior::className()]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
