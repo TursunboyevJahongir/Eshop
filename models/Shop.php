@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "shop".
@@ -21,8 +23,16 @@ use Yii;
  * @property News[] $news
  * @property Product[] $products
  */
-class Shop extends \yii\db\ActiveRecord
+class Shop extends ActiveRecord
 {
+
+    public function behaviors()
+    {
+        return [
+            ['class' => TimestampBehavior::className()]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */

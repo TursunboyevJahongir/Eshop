@@ -12,7 +12,6 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-
 class UserController extends Controller
 {
     public $modelClass = 'app\models\User';
@@ -62,7 +61,7 @@ class UserController extends Controller
                     ->from('address')
                     ->Leftjoin("district",' district.id = address.`district_id`')
                     ->Leftjoin("region",' region.id = district.`region_id`')
-                    ->where('address.id ='.$id)->all();
+                    ->where('address.id ='.$model->address_id)->all();
                 $query =['Address'=> $query];
                 $model = $model->toArray();
                 $res = array_merge($model,$query);
@@ -76,8 +75,6 @@ class UserController extends Controller
     public function actionCreate()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-
-
         $model = new User();
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
             $model->save();

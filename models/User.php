@@ -34,7 +34,7 @@ class User extends ActiveRecord
 //    public function behaviors()
 //    {
 //        return [
-//            ['class' => TimestampBehavior::class]
+//            ['class' => TimestampBehavior::className()]
 //        ];
 //    }
 

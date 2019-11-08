@@ -11,7 +11,8 @@ use Yii;
  * @property int $district_id
  * @property string $address
  *
- * @property District $district
+ * @property District[] $districts
+ * @property Region $region
  * @property Order[] $orders
  * @property OrderHistory[] $orderHistories
  * @property User[] $users
@@ -58,6 +59,7 @@ class Address extends \yii\db\ActiveRecord
     {
         return $this->hasOne(District::className(), ['id' => 'district_id']);
     }
+
 
     /**
      * @return \yii\db\ActiveQuery

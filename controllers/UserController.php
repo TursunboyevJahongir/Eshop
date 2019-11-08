@@ -9,10 +9,16 @@
 namespace app\controllers;
 
 
+use app\models\Address;
 use app\models\ResponseJSON;
 use app\models\User;
 use Yii;
+use yii\base\InvalidArgumentException;
+use yii\db\Exception;
 use yii\db\Query;
+use yii\db\StaleObjectException;
+use yii\helpers\ArrayHelper;
+use yii\rest\ActiveController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -51,7 +57,7 @@ class UserController extends Controller
                     ->from('address')
                     ->Leftjoin("district",' district.id = address.`district_id`')
                     ->Leftjoin("region",' region.id = district.`region_id`')
-                    ->where('address.id ='.$id)->all();
+                    ->where('address.id ='.$model->address_id)->all();
                 $query =['Address'=> $query];
                 $model = $model->toArray();
                 $res = array_merge($model,$query);
