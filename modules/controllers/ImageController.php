@@ -4,7 +4,7 @@
 namespace app\modules\controllers;
 
 
-use app\models\Follower;
+use app\models\Image;
 use app\models\ResponseJSON;
 use http\Exception;
 use Yii;
@@ -13,7 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-class FollowerController extends Controller
+class ImageController extends Controller
 {
     public function beforeAction($action)
     {
@@ -46,11 +46,10 @@ class FollowerController extends Controller
                 throw new NotFoundHttpException('topilmadi');
             try {
                 $result = [];
-                $follower = Follower::findOne(['id' => $id]);
-                $add = $follower->toArray();
+                $image = Image::findOne(['id' => $id]);
+                $add = $image->toArray();
                 $add = array_merge($add,[
-                    'shop' => $follower->shop,
-                    'user' => $follower->user,
+                    'product' => $image->product,
                 ]);
                 array_push($result, $add);
 
@@ -66,7 +65,7 @@ class FollowerController extends Controller
         }
         else{
             try {
-                $model = Follower::find()->all();
+                $model = Image::find()->all();
                 $response->status = 'ok';
                 $response->data = $model;
                 $response->message = '';
@@ -83,7 +82,7 @@ class FollowerController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $response = new ResponseJSON();
-        $model = new Follower();
+        $model = new Image();
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
             $model->save();
             $response->status = 'ok';
@@ -99,7 +98,7 @@ class FollowerController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $response = new ResponseJSON();
         if ($id !== null && is_numeric($id)) {
-            $model = Follower::findOne(['id' => $id]);
+            $model = Image::findOne(['id' => $id]);
             if ($model === null) {
                 throw new NotFoundHttpException('topilmadi');
             }
@@ -117,7 +116,7 @@ class FollowerController extends Controller
     public function actionDelete($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = Follower::findOne(['id' => $id]);
+        $model = Image::findOne(['id' => $id]);
         if ($model === null) {
             throw new NotFoundHttpException('topilmadi');
         }

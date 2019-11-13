@@ -50,7 +50,7 @@ class ProductController extends Controller
                 $product = Product::findOne(['id' => $id]);
                 $add = $product->toArray();
                 $add = array_merge($add,[
-                    'region' => $product->region,
+                    'district' => $product->district,
                     'category' => $product->category,
                     'shop' => $product->shop,
                     'manufacture' => $product->manufacture,

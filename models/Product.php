@@ -9,7 +9,7 @@ use yii\behaviors\TimestampBehavior;
  * This is the model class for table "product".
  *
  * @property int $id
- * @property int $region_id
+ * @property int $district_id
  * @property int $category_id
  * @property int $shop_id
  * @property int $manufacture_id
@@ -27,21 +27,19 @@ use yii\behaviors\TimestampBehavior;
  * @property Popular[] $populars
  * @property Category $category
  * @property Manufacture $manufacture
- * @property Region $region
  * @property Shop $shop
  * @property Image $defoultImage
+ * @property District $district
  * @property Recome[] $recomes
  */
 class Product extends \yii\db\ActiveRecord
 {
-
-        public function behaviors()
+    public function behaviors()
     {
         return [
             ['class' => TimestampBehavior::className()]
         ];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -56,16 +54,16 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['region_id', 'category_id', 'shop_id', 'manufacture_id', 'defoult_image', 'discount', 'created_at', 'updated_at'], 'integer'],
+            [['district_id', 'category_id', 'shop_id', 'manufacture_id', 'defoult_image', 'discount', 'created_at', 'updated_at'], 'integer'],
             [['name', 'price'], 'required'],
             [['price'], 'number'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['manufacture_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacture::className(), 'targetAttribute' => ['manufacture_id' => 'id']],
-            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Region::className(), 'targetAttribute' => ['region_id' => 'id']],
             [['shop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shop::className(), 'targetAttribute' => ['shop_id' => 'id']],
             [['defoult_image'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['defoult_image' => 'id']],
+            [['district_id'], 'exist', 'skipOnError' => true, 'targetClass' => District::className(), 'targetAttribute' => ['district_id' => 'id']],
         ];
     }
 
@@ -76,7 +74,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'region_id' => 'Region ID',
+            'district_id' => 'District ID',
             'category_id' => 'Category ID',
             'shop_id' => 'Shop ID',
             'manufacture_id' => 'Manufacture ID',
@@ -141,14 +139,6 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRegion()
-    {
-        return $this->hasOne(Region::className(), ['id' => 'region_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getShop()
     {
         return $this->hasOne(Shop::className(), ['id' => 'shop_id']);
@@ -160,6 +150,14 @@ class Product extends \yii\db\ActiveRecord
     public function getDefoultImage()
     {
         return $this->hasOne(Image::className(), ['id' => 'defoult_image']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDistrict()
+    {
+        return $this->hasOne(District::className(), ['id' => 'district_id']);
     }
 
     /**
