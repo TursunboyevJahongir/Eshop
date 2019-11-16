@@ -48,9 +48,14 @@ class ProductController extends Controller
             try {
                 $result = [];
                 $product = Product::findOne(['id' => $id]);
+                if ($product === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $add = $product->toArray();
                 $add = array_merge($add,[
-                    'district' => $product->district,
+
+                    'region'=>$product->district->region->name,
+                    'district' => $product->district->name,
                     'category' => $product->category,
                     'shop' => $product->shop,
                     'manufacture' => $product->manufacture,
@@ -87,6 +92,7 @@ class ProductController extends Controller
             }
         }
     }
+
 
     public function actionCreate()
     {

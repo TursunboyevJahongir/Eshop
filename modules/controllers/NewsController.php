@@ -47,6 +47,9 @@ class NewsController extends Controller
             try {
                 $result = [];
                 $news = News::findOne(['id' => $id]);
+                if ($news === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $add = $news->toArray();
                 $add = array_merge($add,[
                     'shop' => $news->shop,

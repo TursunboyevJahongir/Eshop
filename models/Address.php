@@ -33,9 +33,9 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['district_id', 'address'], 'required'],
+            [['district_id', 'name'], 'required'],
             [['district_id'], 'integer'],
-            [['address'], 'string'],
+            [['name'], 'string'],
             [['district_id'], 'exist', 'skipOnError' => true, 'targetClass' => District::className(), 'targetAttribute' => ['district_id' => 'id']],
         ];
     }
@@ -48,7 +48,7 @@ class Address extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'district_id' => 'District ID',
-            'address' => 'Address',
+            'name' => 'Name',
         ];
     }
 

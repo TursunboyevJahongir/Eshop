@@ -47,6 +47,9 @@ class OrderProductController extends Controller
             try {
                 $result = [];
                 $op = OrderProduct::findOne(['id' => $id]);
+                if ($op === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $add = $op->toArray();
                 $add = array_merge($add,[
                     'product' => $op->product,

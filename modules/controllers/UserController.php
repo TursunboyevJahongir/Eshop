@@ -57,7 +57,7 @@ class UserController extends Controller
                 }
 //                $address = Yii::$app->db->createCommand("SELECT region.name AS Region,district.name AS District,address.address AS Address FROM address LEFT JOIN district district ON district.id = address.`district_id` LEFT JOIN region region ON region.id = district.`region_id`")->queryAll();
                 $query = new Query;
-                $query = $query->select(" region.name AS Region,district.name AS District,address.address AS Address ")
+                $query = $query->select(" region.name AS region,district.name AS district,address.name AS name ")
                     ->from('address')
                     ->Leftjoin("district",' district.id = address.`district_id`')
                     ->Leftjoin("region",' region.id = district.`region_id`')

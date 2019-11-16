@@ -48,6 +48,7 @@ class ManufactureController extends Controller
                 return $response;
             } catch (Exception $e) {
                 $response->status = 'error';
+                $response->data = '';
                 $response->message = $e->getMessage();
                 return $response;
             }
@@ -56,12 +57,16 @@ class ManufactureController extends Controller
                 throw new NotFoundHttpException('topilmadi');
             try {
                 $model = Manufacture::findOne(['id' => $id]);
+                if ($model === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $response->status = 'ok';
                 $response->data = $model;
                 $response->message = '';
                 return $response;
             } catch (Exception $e) {
                 $response->status = 'error';
+                $response->data = '';
                 $response->message = $e->getMessage();
                 return $response;
             }
@@ -76,7 +81,8 @@ class ManufactureController extends Controller
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
             $model->save();
             $response->status = 'ok';
-            $response->message = null;
+            $response->message = "";
+            $response->data = "";
             return $response;
         } else
             return ['status' => 'error', 'message' => $model->getErrors(), 'data'=>""];
@@ -94,7 +100,8 @@ class ManufactureController extends Controller
             if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
                 $model->save();
                 $response->status="ok";
-                $response->message = null;
+                $response->message = "";
+                $response->data = "";
                 return $response;
             } else
                 return ['status' => 'error', 'message' => $model->getErrors(),'data' => ""];

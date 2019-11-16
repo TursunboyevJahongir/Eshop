@@ -47,6 +47,9 @@ class FollowerController extends Controller
             try {
                 $result = [];
                 $follower = Follower::findOne(['id' => $id]);
+                if ($follower === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $add = $follower->toArray();
                 $add = array_merge($add,[
                     'shop' => $follower->shop,

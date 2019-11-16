@@ -47,6 +47,9 @@ class PopularController extends Controller
             try {
                 $result = [];
                 $popular = Popular::findOne(['id' => $id]);
+                if ($popular === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $add = $popular->toArray();
                 $add = array_merge($add,[
                     'product' => $popular->product,

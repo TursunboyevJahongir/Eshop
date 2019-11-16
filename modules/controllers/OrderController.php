@@ -47,6 +47,9 @@ class OrderController extends Controller
             try {
                 $result = [];
                 $order = Order::findOne(['id' => $id]);
+                if ($order === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $add = $order->toArray();
                 $add = array_merge($add,[
                     'user' => $order->user,

@@ -47,6 +47,9 @@ class RecomeController extends Controller
             try {
                 $result = [];
                 $recome = Recome::findOne(['id' => $id]);
+                if ($recome === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $add = $recome->toArray();
                 $add = array_merge($add,[
                     'product' => $recome->product,

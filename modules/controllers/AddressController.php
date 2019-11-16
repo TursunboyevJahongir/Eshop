@@ -113,7 +113,8 @@ class AddressController extends Controller
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
             $model->save();
             $response->status = 'ok';
-            $response->message = null;
+            $response->message = "";
+            $response->data = "";
             return $response;
         } else
             return ['status' => 'error', 'message' => $model->getErrors(), 'data'=>""];
@@ -131,7 +132,8 @@ class AddressController extends Controller
             if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
                 $model->save();
                 $response->status="ok";
-                $response->message = null;
+                $response->message = "";
+                $response->data = "";
                 return $response;
             } else
                 return ['status' => 'error', 'message' => $model->getErrors(),'data' => ""];

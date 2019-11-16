@@ -60,6 +60,9 @@ class RegionController extends Controller
         {
             try {
                 $model = Region::findOne(['id' => $id]);
+                if ($model === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $res = $model->toArray();
                 $dis = ['districts' => $model->districts];
                 $res = array_merge($res, $dis);
@@ -69,6 +72,7 @@ class RegionController extends Controller
                 return $response;
             } catch (Exception $e) {
                 $response->status = 'error';
+                $response->data = "";
                 $response->message = $e->getMessage();
                 return $response;
             }
@@ -87,7 +91,8 @@ class RegionController extends Controller
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
             $model->save();
             $response->status = 'ok';
-            $response->message = null;
+            $response->message = "";
+            $response->data = "";
             return $response;
         } else
             return ['status' => 'error', 'message' => $model->getErrors(), 'data' => ""];
@@ -105,7 +110,8 @@ class RegionController extends Controller
             if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
                 $model->save();
                 $response->status = "ok";
-                $response->message = null;
+                $response->message = "";
+                $response->data = "";
                 return $response;
             } else
                 return ['status' => 'error', 'message' => $model->getErrors(), 'data' => ""];

@@ -3,24 +3,28 @@
 namespace app\models;
 
 use Yii;
-use yii\base\Behavior;
-use yii\behaviors\AttributeBehavior;
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\db\BaseActiveRecord;
-use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
  *
  * @property int $id
- * @property string $login
+ * @property int $address_id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $image
+ * @property string $email
+ * @property string $phone
  * @property string $password
- * @property integer $created_at
- * @property integer $updated_at
+ * @property int $created_at
+ * @property int $updated_at
+ *
+ * @property Favourite[] $favourites
+ * @property Follower[] $followers
+ * @property Order[] $orders
+ * @property OrderHistory[] $orderHistories
+ * @property Address $address
  */
-
-
 class User extends ActiveRecord
 {
     /**
@@ -50,20 +54,18 @@ class User extends ActiveRecord
         }
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['first_name', 'last_name', 'password', 'phone'], 'required'],
-            [['first_name', 'last_name'], 'string', 'max' => 40],
-            [['created_at', 'updated_at'], 'number'],
-            [['address_id'], 'number'],
-            [['password'], 'string', 'max' => 255],
-            [['phone'], 'string', 'max' => 12],
-            [['email'], 'email'],
+            [['address_id', 'created_at', 'updated_at'], 'integer'],
+            [['first_name', 'last_name', 'email', 'phone', 'password'], 'required'],
+            [['first_name', 'last_name', 'image', 'email', 'password'], 'string', 'max' => 255],
+            [['email'],'email'],
+            [['phone'], 'string', 'max' => 20],
+            [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['address_id' => 'id']],
         ];
     }
 
@@ -74,14 +76,55 @@ class User extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'address_id' => 'AddressId',
-            'first_name' => 'First name',
-            'last_name' => 'Last name',
-            'password' => 'Password',
+            'address_id' => 'Address ID',
+            'first_name' => 'First Name',
+            'last_name' => 'Last Name',
+            'image' => 'Image',
+            'email' => 'Email',
             'phone' => 'Phone',
-            'email' => 'Email'
+            'password' => 'Password',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFavourites()
+    {
+        return $this->hasMany(Favourite::className(), ['user_id' => 'id']);
+    }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFollowers()
+    {
+        return $this->hasMany(Follower::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrders()
+    {
+        return $this->hasMany(Order::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrderHistories()
+    {
+        return $this->hasMany(OrderHistory::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddress()
+    {
+        return $this->hasOne(Address::className(), ['id' => 'address_id']);
+    }
 }

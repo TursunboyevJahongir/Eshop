@@ -47,6 +47,9 @@ class ImageController extends Controller
             try {
                 $result = [];
                 $image = Image::findOne(['id' => $id]);
+                if ($image === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $add = $image->toArray();
                 $add = array_merge($add,[
                     'product' => $image->product,

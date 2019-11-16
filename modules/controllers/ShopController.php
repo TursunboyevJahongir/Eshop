@@ -44,6 +44,9 @@ class ShopController extends Controller
                 throw new NotFoundHttpException('topilmadi');
             try {
                 $model = Shop::findOne(['id' => $id]);
+                if ($model === null) {
+                    throw new NotFoundHttpException('topilmadi');
+                }
                 $response->status = 'ok';
                 $response->data = $model;
                 $response->message = '';
