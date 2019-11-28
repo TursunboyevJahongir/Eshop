@@ -4,22 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\User */
-$default ='/web/uploads/avatar.png';
-$avatar = $model->image;
-if($avatar==null)
-    echo"<center><img src='".$default."' style='border-radius: 50%;height: 300px'></center>";
-else{
-    echo"<center><img src='/web/".$avatar."' style='border-radius: 20%;transform:  rotate(30deg);position: absolute;opacity: 0.1;height: 550px'></center>";
-    echo"<center><img src='/web/".$avatar."' style='border-radius: 50%'></center>";
-}
+/* @var $model app\models\product */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->title = $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="user-view">
+<div class="product-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -37,15 +29,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-
-
-            'first_name',
-            'last_name',
-
-            'email:email',
-            'phone',
-
-
+            'id',
+            'district_id',
+            'category_id',
+            'shop_id',
+            'manufacture_id',
+            'name',
+            'price',
+            'defoult_image',
+            'description:ntext',
+            'discount',
+            'created_at',
+            'updated_at',
         ],
     ]) ?>
 

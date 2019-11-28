@@ -4,28 +4,32 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\web\UploadedFile;
+use yii\imagine\Image;
 
 class UploadForm extends Model
 {
     /**
      * @var UploadedFile
      */
-    public $imageFile;
+    public $img;
 
     public function rules()
     {
         return [
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            [['img'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg,jpeg'],
         ];
     }
 
     public function upload()
     {
         if ($this->validate()) {
-            $this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            return true;
+            $imgpath = 'uploads/';
+            $imgname =  $this->img->baseName . time().'.' . $this->img->extension;
+            $this->img->saveAs($imgpath.$imgname);
+            return ['path' => $imgpath, 'name' => $imgname];
         } else {
             return false;
         }
+
     }
 }

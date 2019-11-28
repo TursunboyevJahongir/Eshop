@@ -17,7 +17,6 @@ class m191026_060212_create_image_table extends Migration
             'path' => $this->string(),
             'thumb_1024' => $this->string(),
             'thumb_256' => $this->string(),
-
         ]);
     }
 

@@ -66,6 +66,7 @@ class User extends ActiveRecord
             [['email'],'email'],
             [['phone'], 'string', 'max' => 20],
             [['address_id'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['address_id' => 'id']],
+            [['image'], 'string']
         ];
     }
 

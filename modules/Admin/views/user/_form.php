@@ -69,7 +69,7 @@ $this->registerJs($a);
 
 <!--    --><?//= $form->field($imgmodel, 'img')->textInput(['type' =>'file']) ?>
     <?= $form->field($imgmodel, 'img')->widget(FileInput::classname(), [
-        'options' => ['accept' => 'image/*'],
+
     ]);?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>

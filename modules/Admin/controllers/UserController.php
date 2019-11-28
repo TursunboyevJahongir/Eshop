@@ -1,12 +1,14 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\Admin\controllers;
 
 use app\models\Region;
 use app\models\UploadForm;
 use Yii;
 use app\models\User;
+use yii\base\Exception;
 use yii\data\ActiveDataProvider;
+use yii\imagine\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -63,16 +65,17 @@ class UserController extends Controller
     public function actionUpload()
     {
         $model = new UploadForm();
-
-        if (Yii::$app->request->isPost) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if ($model->upload()) {
-                // file is uploaded successfully
-                return;
+        $img = '';
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->validate())  {
+            $img = $model->upload();
+            if ($img === false) {
+                throw new Exception('Upload failed');
             }
+
+            Image::thumbnail($img['path'].$img['name'], 128, 128, 0)->save($_SERVER['DOCUMENT_ROOT'].'/web/'.$img['path'].'128_'.$img['name'], ['jpeg_quality' => 50]);
         }
 
-        return $this->render('upload', ['model' => $model]);
+        return $this->render('upload', ['model' => $model, 'i' => $_SERVER['DOCUMENT_ROOT'].'/web/'.$img['path'].'128_'.$img['name']]);
     }
     /**
      * Creates a new User model.
@@ -98,13 +101,18 @@ class UserController extends Controller
 
             if (Yii::$app->request->isPost) {
                 $imgmodel->img = UploadedFile::getInstance($imgmodel, 'img');
-                $imgmodel->upload();
+                if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->validate())  {
+                    $img = $imgmodel->upload();
+                    if ($img === false) {
+                        throw new Exception('Upload failed');
+                    }
+                    Image::thumbnail($_SERVER['DOCUMENT_ROOT'].'/web/'.$img['path'].$img['name'], 256, 256, 0)->save($_SERVER['DOCUMENT_ROOT'].'/web/'.$img['path'].'256_'.$img['name'], ['jpeg_quality' => 50]);
+                    $model->image = $img['path'].'256_'.$img['name'];
+                }
             }
-            if($model->load(Yii::$app->request->post()) && $model->validate())
-            {
-                $model->save();
+            $model->save();
+
                 return $this->redirect(['view', 'id' => $model->id]);
-            }
 //            return $this->render('create', ['model' => $model, 'imgmodel' => $imgmodel]);
         }
         $imgmodel = new UploadForm();

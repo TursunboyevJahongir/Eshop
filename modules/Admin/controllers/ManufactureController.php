@@ -1,22 +1,18 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\admin\controllers;
 
-use app\models\Region;
-use app\models\UploadForm;
 use Yii;
-use app\models\User;
+use app\models\Manufacture;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use yii\imagine\Image;
 
 /**
- * UserController implements the CRUD actions for User model.
+ * ManufactureController implements the CRUD actions for Manufacture model.
  */
-class UserController extends Controller
+class ManufactureController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -34,13 +30,13 @@ class UserController extends Controller
     }
 
     /**
-     * Lists all User models.
+     * Lists all Manufacture models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find(),
+            'query' => Manufacture::find(),
         ]);
 
         return $this->render('index', [
@@ -49,7 +45,7 @@ class UserController extends Controller
     }
 
     /**
-     * Displays a single User model.
+     * Displays a single Manufacture model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -61,63 +57,26 @@ class UserController extends Controller
         ]);
     }
 
-    public function actionUpload()
-    {
-        $model = new UploadForm();
-
-        if (Yii::$app->request->isPost) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if ($model->upload()) {
-                // file is uploaded successfully
-                return;
-            }
-        }
-
-        return $this->render('upload', ['model' => $model]);
-    }
     /**
-     * Creates a new User model.
+     * Creates a new Manufacture model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new User();
-        $region = Region::find()->select('id,name')->all();
+        $model = new Manufacture();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-//            var_dump($region);
-//            foreach ($region as $r):
-//                echo $r->name.'<br>';
-//            endforeach;
-//            $model->img = UploadedFile::getInstance($model, 'img');
-//            $model->img->saveAs('uploads/' . $model->img->baseName . '.' . $model->img->extension);
-//            $model->image = 'uploads/' . $model->img->baseName . '.' . $model->img->extension;
-//            $model->save();
-//            return $this->redirect(['view', 'id' => $model->id]);
-            $imgmodel = new UploadForm();
-
-            if (Yii::$app->request->isPost) {
-                $imgmodel->img = UploadedFile::getInstance($imgmodel, 'img');
-                $imgmodel->upload();
-            }
-            if($model->load(Yii::$app->request->post()) && $model->validate())
-            {
-                $model->save();
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-//            return $this->render('create', ['model' => $model, 'imgmodel' => $imgmodel]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
-        $imgmodel = new UploadForm();
+
         return $this->render('create', [
             'model' => $model,
-            'region' => $region,
-            'imgmodel' => $imgmodel
         ]);
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing Manufacture model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -137,7 +96,7 @@ class UserController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing Manufacture model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -151,15 +110,15 @@ class UserController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the Manufacture model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return User the loaded model
+     * @return Manufacture the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = Manufacture::findOne($id)) !== null) {
             return $model;
         }
 
