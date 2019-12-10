@@ -22,7 +22,12 @@
       
         "uxweb/sweet-alert": "^2.0",
         "kartik-v/yii2-widget-fileinput": "dev-master",
-        "yiisoft/yii2-imagine": "^2.2"
+        "yiisoft/yii2-imagine": "^2.2",
+        "kartik-v/yii2-widget-depdrop": "dev-master",
+        "kartik-v/yii2-widget-select2": "dev-master",
+        "yiisoft/yii2-bootstrap4": "^2.0",
+        "kartik-v/yii2-label-inplace": "dev-master",
+        "kartik-v/yii2-widget-touchspin": "dev-master"
 
     },
     "require-dev": {

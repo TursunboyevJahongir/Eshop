@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\file\FileInput;
+use kartik\label\LabelInPlace;
 //use dmstr\widgets\Alert;
 use yii\bootstrap\Alert;
 /* @var $this yii\web\View */
@@ -69,14 +70,32 @@ $this->registerJs($a);
 
 <!--    --><?//= $form->field($imgmodel, 'img')->textInput(['type' =>'file']) ?>
     <?= $form->field($imgmodel, 'img')->widget(FileInput::classname(), [
-
+        'options' => ['accept' => 'image/*'],
     ]);?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+<!--    --><?//= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+    <?=$form->field($model, 'phone')->widget(LabelInPlace::className(),[
+        'name'=>'phone',
+        'label'=>'<i class="glyphicon glyphicon-phone"></i> Telefon raqami',
+        'encodeLabel'=> false
+    ]);?>
 
-    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+    <?=$form->field($model, 'password')->widget(LabelInPlace::className(),[
+        'name'=>'Enter code',
+        'type'=>LabelInPlace::TYPE_TEXT,
+        'label'=>'<i class="glyphicon glyphicon-lock"></i> Parolni kiriting',
+        'encodeLabel'=>false,
+        'pluginOptions'=>[
+            'labelPosition'=>'down',
+            'labelArrowDown'=>' <i class="glyphicon glyphicon-chevron-down"></i>',
+            'labelArrowUp'=>' <i class="glyphicon glyphicon-chevron-up"></i>',
+            'labelArrowRight'=>' <i class="glyphicon glyphicon-chevron-right"></i>',
+        ]
+    ]);?>
+
+<!--    --><?//= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -3,21 +3,15 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-
 /* @var $this yii\web\View */
-/* @var $model app\models\Manufacture */
+/* @var $model app\models\User */
 
-$this->title = $model->name;
-$avatar = $model->ico;
-if($avatar!==null) {
-//    echo "<center><img src='/web/" . $avatar . "' style='border-radius: 20%;transform:  rotate(30deg);position: absolute;opacity: 0.1;height: 550px'></center>";
-    echo "<center><img src='/web/" . $avatar . "' style='border-radius: 20%'></center>";
-}
-$this->params['breadcrumbs'][] = ['label' => 'Manufactures', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="manufacture-view">
+<div class="user-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -36,8 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'name',
-            'ico',
+            'address_id',
+            'first_name',
+            'last_name',
+            'image',
+            'email:email',
+            'phone',
+            'password',
+            'created_at',
+            'updated_at',
         ],
     ]) ?>
 

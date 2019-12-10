@@ -2,6 +2,7 @@
 
 namespace app\modules\Admin\controllers;
 
+use app\controllers\BaseController;
 use app\models\Region;
 use app\models\UploadForm;
 use Yii;
@@ -17,7 +18,7 @@ use yii\web\UploadedFile;
 /**
  * UserController implements the CRUD actions for User model.
  */
-class UserController extends Controller
+class UserController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -67,7 +68,7 @@ class UserController extends Controller
         $model = new UploadForm();
         $img = '';
         if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->validate())  {
-            $img = $model->upload();
+            $img = $model->upload("/web/uploads/users/");
             if ($img === false) {
                 throw new Exception('Upload failed');
             }
@@ -85,7 +86,7 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new User();
-        $region = Region::find()->select('id,name')->all();
+//        $region = Region::find()->select('id,name')->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 //            var_dump($region);
@@ -102,7 +103,7 @@ class UserController extends Controller
             if (Yii::$app->request->isPost) {
                 $imgmodel->img = UploadedFile::getInstance($imgmodel, 'img');
                 if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->validate())  {
-                    $img = $imgmodel->upload();
+                    $img = $imgmodel->upload('uploads/users/');
                     if ($img === false) {
                         throw new Exception('Upload failed');
                     }

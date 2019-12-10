@@ -1,18 +1,28 @@
 <?php
 
-namespace app\modules\admin\controllers;
+namespace app\modules\Admin\controllers;
 
+use app\controllers\BaseController;
+use app\models\Category;
+use app\models\District;
+use app\models\Manufacture;
+use app\models\Region;
+use app\models\Shop;
+use app\models\UploadForm;
 use Yii;
 use app\models\product;
+use yii\base\Exception;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
+use yii\data\Pagination;
+
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * PraductController implements the CRUD actions for product model.
  */
-class PraductController extends Controller
+class ProductController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -52,8 +62,17 @@ class PraductController extends Controller
      */
     public function actionView($id)
     {
+        $query = \app\models\Image::find()->where(['product_id'=>$id]);
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(),'pageSize'=>9]);
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        $images = \app\models\Image::findAll(['product_id'=>$id]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'images' => $models,
+            'pagination' => $pages,
         ]);
     }
 
@@ -65,13 +84,55 @@ class PraductController extends Controller
     public function actionCreate()
     {
         $model = new product();
+        $region = Region::find()->all();
+        $district = District::find()->all();
+        $category = Category::find()->asArray()->all();
+        $shop = Shop::find()->all();
+        $manufacture = Manufacture::find()->all();
+        $imgmodel = new UploadForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+//            var_dump($imgmodel);
+//            die;
+//            return $this->redirect(['view', 'id' => $model->id]);
+            $model->save();
+            $imgmodel = UploadedFile::getInstances($imgmodel, 'img');
+            if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->validate()) {
+                $index=null;
+                foreach ($imgmodel as $image):
+                    $img['path'] = '/uploads/products/';
+                    $img['name'] = time().uniqid().'.'.$image->getExtension();
+                    $image->saveAs($_SERVER['DOCUMENT_ROOT'].'/web'.$img['path'].$img['name']);
+//var_dump(Image::thumbnail($_SERVER['DOCUMENT_ROOT'] . '/web' . $img['path'] . $img['name'], 1024, 1024, 0)->save($_SERVER['DOCUMENT_ROOT'] . '/web/' . $img['path'] . '1024_' . $img['name']));
+//die;
+                    $thumb = new \app\models\Image();
+//                    $thumb->path = $this->Thumb($img['name']);
+                    $thumb->path = $img['path'] . $img['name'];
+//                    $thumb->thumb_1024 = Image::thumbnail($_SERVER['DOCUMENT_ROOT'] . '/web' . $img['path'] . $img['name'], 1024, 1024, 0)->save($_SERVER['DOCUMENT_ROOT'] . '/web/' . $img['path'] . '1024_' . $img['name']);
+                    $thumb->thumb_1024 = $this->Thumb($img['name'],1024,'/uploads/products/');
+//                    $thumb->thumb_256 = Image::thumbnail($_SERVER['DOCUMENT_ROOT'] . '/web' . $img['path'] . $img['name'], 256, 256, 0)->save($_SERVER['DOCUMENT_ROOT'] . '/web/' . $img['path'] . '256_' . $img['name'], ['jpeg_quality' => 50]);
+                    $thumb->thumb_256 =  $this->Thumb($img['name'],256,'/uploads/products/');
+                    $thumb->product_id = $model->id;
+                    $thumb->save();
+                    if(is_null($index)){
+                        $index=$thumb->id;
+                    }
+                endforeach;
+
+            }
+            $model->defoult_image =$index;
+            $model->save();
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'region' => $region,
+            'district' => $district,
+            'category' => $category,
+            'shop' => $shop,
+            'manufacture' => $manufacture,
+            'imgmodel' => $imgmodel,
         ]);
     }
 
@@ -123,5 +184,27 @@ class PraductController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionA() {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $id = end($_POST['depdrop_parents']);
+            $list = District::find()->andWhere(['region_id' => $id])->asArray()->all();
+            $selected  = null;
+            if ($id != null && count($list) > 0) {
+                $selected = '';
+                foreach ($list as $i => $district) {
+                    $out[] = ['id' => $district['id'], 'name' => $district['name']];
+                    if ($i == 0) {
+                        $selected = $district['id'];
+                    }
+                }
+                // Shows how you can preselect a value
+                return ['output' => $out, 'selected' => $selected];
+            }
+        }
+        return ['output' => '', 'selected' => ''];
     }
 }

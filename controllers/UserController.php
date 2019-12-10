@@ -48,6 +48,11 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionParol()
+    {
+        return $this->render('index');
+    }
+
     /**
      * Displays a single User model.
      * @param integer $id

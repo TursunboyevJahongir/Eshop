@@ -32,6 +32,9 @@
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
+                    ['label' => 'User', 'icon' => ' fa-users', 'url' => ['/admin/user'],],
+                    ['label' => 'Product', 'icon' => ' fa-th-large', 'url' => ['/admin/product'],],
+                    ['label' => 'Manufacture', 'icon' => ' fa-apple', 'url' => ['/admin/manufacture'],],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
@@ -40,6 +43,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                            ['label' => 'User', 'icon' => 'fa-users', 'url' => ['/admin/user'],],
                             ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
                             [
                                 'label' => 'Level One',

@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Product', ['create'], ['class' => 'fa fa-plus-circle btn btn-success btn-lg ']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -29,11 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'category_id',
             'shop_id',
             'manufacture_id',
-            //'name',
-            //'price',
-            //'defoult_image',
-            //'description:ntext',
-            //'discount',
+            'name',
+            'price',
+            'defoult_image',
+            'description:ntext',
+            'discount',
             //'created_at',
             //'updated_at',
 

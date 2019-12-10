@@ -16,20 +16,26 @@ class UploadForm extends Model
     public function rules()
     {
         return [
-            [['img'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg,jpeg'],
+            [['img'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg,jpeg', 'maxFiles' => 100],
         ];
     }
 
-    public function upload()
+    public function upload($imgpath)
     {
         if ($this->validate()) {
-            $imgpath = 'uploads/';
+//            $imgpath = 'uploads/';
             $imgname =  $this->img->baseName . time().'.' . $this->img->extension;
             $this->img->saveAs($imgpath.$imgname);
             return ['path' => $imgpath, 'name' => $imgname];
         } else {
-            return false;
+            return $this->errors;
         }
-
     }
+
+//    public function Uploads()
+//    {
+//
+//    }
+
+
 }

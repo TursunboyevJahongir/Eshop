@@ -1,18 +1,23 @@
 <?php
 
-namespace app\modules\admin\controllers;
+namespace app\modules\Admin\controllers;
 
+use app\controllers\BaseController;
+use app\models\UploadForm;
 use Yii;
 use app\models\Manufacture;
+use yii\base\Exception;
+use yii\base\Theme;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
+use yii\imagine\Image;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ManufactureController implements the CRUD actions for Manufacture model.
  */
-class ManufactureController extends Controller
+class ManufactureController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -44,6 +49,7 @@ class ManufactureController extends Controller
         ]);
     }
 
+
     /**
      * Displays a single Manufacture model.
      * @param integer $id
@@ -65,13 +71,27 @@ class ManufactureController extends Controller
     public function actionCreate()
     {
         $model = new Manufacture();
+        $imgmodel = new UploadForm();
+        $imgpath = '/uploads/manufacturers/';
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->save();
+            if (Yii::$app->request->isPost) {
+                if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->validate()) {
+                    $imgmodel= UploadedFile::getInstances($imgmodel, 'img');
+                    $name = $model->id . '.png';
+                    $imgmodel[0]->saveAs($_SERVER['DOCUMENT_ROOT'] . '/web' . $imgpath . $name);
+                    $images = $this->Thumb($name, 128, $imgpath);
+                    $model->ico = $imgpath. '128_' . $name;
+                    @unlink($_SERVER['DOCUMENT_ROOT'] . '/web/' . $imgpath . $name);
+                }
+            }
+            $model->save();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
         return $this->render('create', [
             'model' => $model,
+            'imgmodel' => $imgmodel
         ]);
     }
 
@@ -104,7 +124,9 @@ class ManufactureController extends Controller
      */
     public function actionDelete($id)
     {
+        @unlink($_SERVER['DOCUMENT_ROOT'] . '/web/' . $this->findModel($id)->ico);
         $this->findModel($id)->delete();
+
 
         return $this->redirect(['index']);
     }
